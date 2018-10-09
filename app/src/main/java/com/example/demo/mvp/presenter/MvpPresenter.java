@@ -1,51 +1,58 @@
 package com.example.demo.mvp.presenter;
 
+import com.example.demo.mvp.model.DataModel;
 import com.example.demo.mvp.model.IMvpCallBack;
 import com.example.demo.mvp.model.MvpModel;
-import com.example.demo.mvp.view.IBaseView;
+import com.example.demo.mvp.model.Token;
 import com.example.demo.mvp.view.IMvpView;
 
-public class MvpPresenter extends BasePresenter<IMvpView>{
+public class MvpPresenter extends BasePresenter<IMvpView> {
 
     public MvpPresenter() {
 
     }
 
-    public void getData(String param) {
-        if(!isViewAttached()){
+    public void getData(String requestParam) {
+        if (!isViewAttached()) {
             return;
         }
 
         getView().showLoading();
 
-        MvpModel.getNetDate(param, new IMvpCallBack() {
-            @Override
-            public void onSuccess(String data) {
-                if (isViewAttached()) {
-                    getView().showData(data);
-                }
-            }
+        DataModel
+                // 设置请求标识token
+                .request(Token.API_USER_DATA)
+                // 添加请求参数，没有则不添加
+                .params(requestParam)
+                // 注册监听回调
+                .execute(new IMvpCallBack() {
+                    @Override
+                    public void onSuccess(String data) {
+                        if (isViewAttached()) {
+                            getView().showData(data);
+                        }
+                    }
 
-            @Override
-            public void onFailure(String msg) {
-                if (isViewAttached()) {
-                    getView().showData(msg);
-                }
-            }
+                    @Override
+                    public void onFailure(String msg) {
+                        if (isViewAttached()) {
+                            getView().showData(msg);
+                        }
+                    }
 
-            @Override
-            public void onError() {
-                if (isViewAttached()) {
-                    getView().showErr();
-                }
-            }
+                    @Override
+                    public void onError() {
+                        if (isViewAttached()) {
+                            getView().showErr();
+                        }
+                    }
 
-            @Override
-            public void onComplete() {
-                if (isViewAttached()) {
-                    getView().hideLoading();
-                }
-            }
-        });
+                    @Override
+                    public void onComplete() {
+                        if (isViewAttached()) {
+                            getView().hideLoading();
+                        }
+                    }
+                });
     }
 }
