@@ -5,6 +5,7 @@ import android.os.Handler;
 
 public class MvpModel {
 
+    //这是平民版本的数据请求用的。
     public static void getNetDate(final String param, final IMvpCallBack callBack){
         new Handler().postDelayed(new Runnable() {
             @Override
