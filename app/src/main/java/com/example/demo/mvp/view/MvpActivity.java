@@ -26,7 +26,8 @@ public class MvpActivity extends AppCompatActivity implements IMvpView{
         progressDialog.setCancelable(false);
         progressDialog.setMessage("loading data");
 
-        presenter = new MvpPresenter(this);
+        presenter = new MvpPresenter();
+        presenter.attachView(this);
     }
 
     public void getData(View view){
@@ -68,5 +69,11 @@ public class MvpActivity extends AppCompatActivity implements IMvpView{
     @Override
     public void showErrorMessage() {
         textView.setText("EXCPTION MSG");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
     }
 }

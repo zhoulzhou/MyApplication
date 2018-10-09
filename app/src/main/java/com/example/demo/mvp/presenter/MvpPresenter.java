@@ -7,32 +7,52 @@ import com.example.demo.mvp.view.IMvpView;
 public class MvpPresenter {
     private IMvpView mView;
 
-    public MvpPresenter(IMvpView view){
+    public MvpPresenter() {
+
+    }
+
+    public void attachView(IMvpView view) {
         this.mView = view;
     }
 
-    public void getData(String param){
+    public void detachView() {
+        this.mView = null;
+    }
+
+    public boolean isViewAttached() {
+        return this.mView != null;
+    }
+
+    public void getData(String param) {
         mView.showLoading();
 
         MvpModel.getNetDate(param, new IMvpCallBack() {
             @Override
             public void onSuccess(String data) {
-                mView.showData(data);
+                if (isViewAttached()) {
+                    mView.showData(data);
+                }
             }
 
             @Override
             public void onFailure(String msg) {
-                mView.showFailureMessage(msg);
+                if (isViewAttached()) {
+                    mView.showFailureMessage(msg);
+                }
             }
 
             @Override
             public void onError() {
-                mView.showErrorMessage();
+                if (isViewAttached()) {
+                    mView.showErrorMessage();
+                }
             }
 
             @Override
             public void onComplete() {
-                mView.hideLoading();
+                if (isViewAttached()) {
+                    mView.hideLoading();
+                }
             }
         });
     }
