@@ -6,9 +6,23 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-public class BaseAppCompatActivity extends AppCompatActivity implements IBaseView{
+import com.example.demo.mvp.presenter.BasePresenter;
+
+import java.nio.channels.AsynchronousByteChannel;
+
+public abstract class BaseActivity extends AppCompatActivity implements IBaseView{
 
     private ProgressDialog mProgressDialog;
+
+    /**
+     * 获取Presenter实例，子类实现
+     */
+    public abstract BasePresenter getPresenter();
+
+    /**
+     * 初始化Presenter的实例，子类实现
+     */
+    public abstract void initPresenter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +30,19 @@ public class BaseAppCompatActivity extends AppCompatActivity implements IBaseVie
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setMessage("Loading data ......");
+
+        initPresenter();
+        if (getPresenter() != null){
+            getPresenter().attachView(this);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (getPresenter() != null){
+            getPresenter().detachView();
+        }
     }
 
     @Override
@@ -44,6 +71,6 @@ public class BaseAppCompatActivity extends AppCompatActivity implements IBaseVie
 
     @Override
     public Context getContext() {
-        return BaseAppCompatActivity.this;
+        return BaseActivity.this;
     }
 }

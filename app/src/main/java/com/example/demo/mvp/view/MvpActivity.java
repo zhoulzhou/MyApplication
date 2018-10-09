@@ -4,46 +4,53 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.demo.mvp.presenter.BasePresenter;
 import com.example.demo.mvp.presenter.MvpPresenter;
 import com.example.demo.myapplication.R;
 
-public class MvpActivity extends BaseAppCompatActivity implements IMvpView{
+public class MvpActivity extends BaseActivity implements IMvpView{
 
-    TextView textView;
-    MvpPresenter presenter;
+    TextView mTextView;
+    MvpPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mvp_main);
 
-        textView = (TextView) findViewById(R.id.text);
+        mTextView = (TextView) findViewById(R.id.text);
+    }
 
-        presenter = new MvpPresenter();
-        presenter.attachView(this);
+    @Override
+    public BasePresenter getPresenter() {
+        return mPresenter;
+    }
+
+    @Override
+    public void initPresenter() {
+        mPresenter = new MvpPresenter();
     }
 
     @Override
     public void showData(String data) {
-        textView.setText(data);
+        mTextView.setText(data);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        presenter.detachView();
     }
 
     public void getData(View view){
-        presenter.getData("normal");
+        mPresenter.getData("normal");
     }
 
     public void getDataForFailure(View view){
-        presenter.getData("failure");
+        mPresenter.getData("failure");
     }
 
     public void getDataForError(View view){
-        presenter.getData("error");
+        mPresenter.getData("error");
     }
 
 }
