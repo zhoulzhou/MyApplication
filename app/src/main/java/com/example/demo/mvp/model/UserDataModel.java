@@ -5,6 +5,8 @@ import android.os.Handler;
 public class UserDataModel extends BaseModel<String>{
     @Override
     public void execute(final IMvpCallBack callback) {
+
+        // 模拟网络请求耗时操作
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
