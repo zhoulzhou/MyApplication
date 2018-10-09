@@ -1,8 +1,5 @@
 package com.example.demo.mvp.view;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -10,9 +7,8 @@ import android.widget.TextView;
 import com.example.demo.mvp.presenter.MvpPresenter;
 import com.example.demo.myapplication.R;
 
-public class MvpActivity extends AppCompatActivity implements IMvpView{
+public class MvpActivity extends BaseAppCompatActivity implements IMvpView{
 
-    ProgressDialog progressDialog;
     TextView textView;
     MvpPresenter presenter;
 
@@ -23,12 +19,19 @@ public class MvpActivity extends AppCompatActivity implements IMvpView{
 
         textView = (TextView) findViewById(R.id.text);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage("loading data");
-
         presenter = new MvpPresenter();
         presenter.attachView(this);
+    }
+
+    @Override
+    public void showData(String data) {
+        textView.setText(data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
     }
 
     public void getData(View view){
@@ -43,43 +46,4 @@ public class MvpActivity extends AppCompatActivity implements IMvpView{
         presenter.getData("error");
     }
 
-    @Override
-    public void showLoading() {
-        if(!progressDialog.isShowing()){
-            progressDialog.show();
-        }
-    }
-
-    @Override
-    public void hideLoading() {
-        if(progressDialog.isShowing()){
-            progressDialog.cancel();
-        }
-    }
-
-    @Override
-    public void showToast(String msg) {
-
-    }
-
-    @Override
-    public void showData(String data) {
-        textView.setText(data);
-    }
-
-    @Override
-    public void showErr() {
-        textView.setText("EXCPTION MSG");
-    }
-
-    @Override
-    public Context getContext() {
-        return this;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        presenter.detachView();
-    }
 }
