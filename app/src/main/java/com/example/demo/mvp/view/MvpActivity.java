@@ -1,6 +1,7 @@
 package com.example.demo.mvp.view;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -57,18 +58,23 @@ public class MvpActivity extends AppCompatActivity implements IMvpView{
     }
 
     @Override
+    public void showToast(String msg) {
+
+    }
+
+    @Override
     public void showData(String data) {
         textView.setText(data);
     }
 
     @Override
-    public void showFailureMessage(String msg) {
-        textView.setText(msg);
+    public void showErr() {
+        textView.setText("EXCPTION MSG");
     }
 
     @Override
-    public void showErrorMessage() {
-        textView.setText("EXCPTION MSG");
+    public Context getContext() {
+        return this;
     }
 
     @Override

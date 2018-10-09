@@ -37,14 +37,14 @@ public class MvpPresenter {
             @Override
             public void onFailure(String msg) {
                 if (isViewAttached()) {
-                    mView.showFailureMessage(msg);
+                    mView.showData(msg);
                 }
             }
 
             @Override
             public void onError() {
                 if (isViewAttached()) {
-                    mView.showErrorMessage();
+                    mView.showErr();
                 }
             }
 
