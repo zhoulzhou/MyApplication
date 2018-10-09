@@ -4,6 +4,7 @@ import com.example.demo.mvp.model.DataModel;
 import com.example.demo.mvp.model.IMvpCallBack;
 import com.example.demo.mvp.model.MvpModel;
 import com.example.demo.mvp.model.Token;
+import com.example.demo.mvp.model.UserDataModel;
 import com.example.demo.mvp.view.IMvpView;
 
 public class MvpPresenter extends BasePresenter<IMvpView> {
@@ -21,7 +22,7 @@ public class MvpPresenter extends BasePresenter<IMvpView> {
 
         DataModel
                 // 设置请求标识token
-                .request(Token.API_USER_DATA)
+                .request(UserDataModel.class)
                 // 添加请求参数，没有则不添加
                 .params(requestParam)
                 // 注册监听回调
