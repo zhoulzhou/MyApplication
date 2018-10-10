@@ -33,7 +33,7 @@ public class MainTestActivity extends AppCompatActivity{
         Tea chinaTea = chinaFactory.createTea();
         Soda chinaSoda = chinaFactory.createSoda();
 
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         sb.append("中国工厂生产的饮料:");
         sb.append("\n");
         sb.append(chinaCoffee.getCoffeeName());

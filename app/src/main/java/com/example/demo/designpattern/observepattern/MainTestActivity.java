@@ -20,7 +20,7 @@ public class MainTestActivity extends AppCompatActivity{
     }
 
     private void test(){
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         Teacher teacher = new Teacher();
 
         Student zhang = new Student("Zhang");
