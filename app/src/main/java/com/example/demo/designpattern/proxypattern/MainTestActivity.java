@@ -20,6 +20,7 @@ public class MainTestActivity extends AppCompatActivity{
     }
 
     private void test(){
+        //静态代理
         AbstractObject proxyObject = new ProxyObject();
         proxyObject.operation();
 
