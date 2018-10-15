@@ -15,11 +15,13 @@
         circleProgressView:centerTextSize="21dp"
         circleProgressView:centerTextColor="#000000"
         circleProgressView:circleColor="@color/colorAccent"
-        circleProgressView:circleRadius="100dp" />
+        circleProgressView:circleRadius="100dp"
+        circleProgressView:progressColor="@color/colorPrimary"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="30dp"
         android:text="开始"
         android:onClick="startUpdate"/>
 
