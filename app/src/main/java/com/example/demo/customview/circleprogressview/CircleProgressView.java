@@ -20,6 +20,7 @@ public class CircleProgressView extends View {
     private float circleRadius;
     private Paint textPaint;
     private Paint circlePaint;
+    private int progress;
 
     public CircleProgressView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
@@ -70,10 +71,10 @@ public class CircleProgressView extends View {
         canvas.drawCircle(width / 2, height / 2, circleRadius, circlePaint);
 
         float textWidth = textPaint.measureText(centerText);
-        float textX = width/2 - textWidth/2;
+        float textX = width / 2 - textWidth / 2;
         Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
-        float dy = -(fontMetrics.ascent + fontMetrics.descent)/2;
-        float textY = height/2 + dy;
+        float dy = -(fontMetrics.ascent + fontMetrics.descent) / 2;
+        float textY = height / 2 + dy;
         canvas.drawText(centerText, textX, textY, textPaint);
     }
 
@@ -87,7 +88,7 @@ public class CircleProgressView extends View {
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(getMeasuredWidth(),getMeasuredHeight());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(getMeasuredWidth(), getMeasuredHeight());
 
         int width = lp.leftMargin + lp.rightMargin;
         int height = lp.bottomMargin + lp.topMargin;
@@ -109,4 +110,16 @@ public class CircleProgressView extends View {
 
         setMeasuredDimension(width, height);
     }
+
+    public void setText(String text){
+        this.centerText = text;
+        invalidate();
+    }
+
+    public void setProgress(int progress){
+        this.progress = progress;
+        this.centerText = progress + "%";
+        invalidate();
+    }
+
 }
