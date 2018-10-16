@@ -9,7 +9,7 @@ import android.view.View;
 import com.example.demo.myapplication.R;
 
 public class MainTestActivity extends AppCompatActivity {
-    private int maxProgress = 10;
+    private int maxProgress = 100;
     private int currentProgress = 0;
     private Handler mHandler = new Handler();
     private CircleProgressView circleProgressView;

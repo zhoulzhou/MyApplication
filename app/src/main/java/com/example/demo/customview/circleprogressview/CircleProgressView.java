@@ -17,6 +17,7 @@ import com.example.demo.myapplication.R;
 
 public class CircleProgressView extends View {
     private static final String TAG = "CircleProgressView";
+    private int windowWidth, windowHeight;
     private String centerText;
     private float centerTextSize;
     private int centerTextColor;
@@ -26,8 +27,15 @@ public class CircleProgressView extends View {
     private Paint circlePaint;
     private Paint progressPaint;
     private Path path;
+    private Bitmap bitmap;
+    private Canvas bitmapCanvas;
+    //水波纹的密度(为了美观，尽可能在20-50之间，理论上没有限制)
+    private int waveDensity = 20;
     private int progressColor;
-    private int progress;
+    private int currentProgress;
+    private int maxProgress = 100;
+    //控件本身的宽和高
+    private float width, height;
 
     public CircleProgressView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
@@ -35,8 +43,14 @@ public class CircleProgressView extends View {
 
     public CircleProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        getWidowAttrs(context);
         initAttrs(context, attrs);
         initPaint();
+    }
+
+    private void getWidowAttrs(Context context){
+        windowWidth = context.getResources().getDisplayMetrics().widthPixels;
+        windowHeight = context.getResources().getDisplayMetrics().heightPixels;
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {
@@ -77,57 +91,65 @@ public class CircleProgressView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int width = getMeasuredWidth();
-        int height = getMeasuredHeight();
-
         super.onDraw(canvas);
 
-        canvas.save();
+        //计算缓冲区画布的宽高，即直径
+        width = circleRadius*2;
+        height = width;
 
-        canvas.drawCircle(width / 2, height / 2, circleRadius, circlePaint);
-
-        //将text画在圆心位置
-        float textWidth = textPaint.measureText(centerText);
-        float textX = width / 2 - textWidth / 2;
-        Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
-        float dy = -(fontMetrics.ascent + fontMetrics.descent) / 2;
-        float textY = height / 2 + dy;
-        canvas.drawText(centerText, textX, textY, textPaint);
-
-        Bitmap bitmap = Bitmap.createBitmap((int) circleRadius*2, (int) circleRadius*2,Bitmap.Config.ARGB_8888);
-        Canvas bitmapCanvas = new Canvas(bitmap);
+        bitmap = Bitmap.createBitmap((int) circleRadius*2, (int) circleRadius*2,Bitmap.Config.ARGB_8888);
+        bitmapCanvas = new Canvas(bitmap);
+        //绘制圆
         bitmapCanvas.drawCircle(width/2,height/2, circleRadius,circlePaint);
 
-        float waveY = (float) (1-progress*0.01) *circleRadius*2;
+       //绘制贝塞尔曲线
+        drawQuad();
 
-        path.moveTo(width-circleRadius*2,0);
+        //绘制文字，这里需要注意文本基线问题
+        float textWidth = textPaint.measureText(centerText);
+        float textX = width / 2 - textWidth / 2;
+        //获取文字上坡度(为负数)和下坡度的高度
+        Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
+        float dy = -(fontMetrics.ascent + fontMetrics.descent) / 2;
+        //下移一部分，确保文字局中
+        float textY = height / 2 + dy;
+        bitmapCanvas.drawText(centerText, textX, textY, textPaint);
+
+        //计算整个画布canvas的宽高，并将缓冲画布绘制在中心处
+        float w = getWidth();
+        float h = getHeight();
+        float cx = w/2 - circleRadius;
+        float cy = h/2 - circleRadius;
+        canvas.drawBitmap(bitmap,cx,cy,null);
+    }
+
+    private void drawQuad(){
+        path.reset();
+        //计算画笔所在的Y坐标值，直径 - 进度移动距离
+        float py = (1- (float) currentProgress/maxProgress) * 2 * circleRadius;
+        //向Y轴方向移动画笔（这里为向上）
+        path.moveTo(0,py);
+        //默认水波纹半径 水平半径
+        float xRadius = 2f * circleRadius / waveDensity;
+        //水波纹当前半径 垂直半径
+        float yRadius = (1 - (float) currentProgress/maxProgress) * xRadius;
+
+        System.out.println("");
+        for(int i=0; i<waveDensity; i++){
+            //这里是在一条直线上绘制的是上下循环的贝塞尔曲线
+            //下曲线，这里可以去掉,但不去掉会更美观
+            //绘制贝塞尔曲线，每次绘制相对上一条的位置开始
+            path.rQuadTo(xRadius,yRadius,2*xRadius,0);
+            //上曲线
+            path.rQuadTo(xRadius,-yRadius,2*xRadius,0);
+        }
+        path.lineTo(width,py);
+        path.lineTo(width,height);
         path.lineTo(0,height);
-        path.lineTo(width/2,height);
-
-//        path.moveTo(width,waveY);
-//        path.lineTo(width,height);
-//        path.lineTo(0,height);
-//        path.lineTo(0,waveY);
-
-//        float space = (circleRadius * 2)/ 6;
-//        float space = 30;
-//        float d = (float) (1-progress*0.01) *space;
-//
-//        System.out.println("circleRadius= " + circleRadius);
-//        System.out.println("progress= " + progress);
-        System.out.println("waveY= " + waveY);
-        System.out.println("width= " + width);
-        System.out.println("height= " + height);
-//        System.out.println("space= " + space);
-//        System.out.println("d= " + d);
-//
-//        for(int i=0; i<circleRadius/(space*4); i++){
-//            path.rQuadTo(space, -d,space*2, 0);
-//            path.rQuadTo(space,d,space*2,0);
-//        }
-
         path.close();
         bitmapCanvas.drawPath(path,progressPaint);
+
+
     }
 
     @Override
@@ -149,7 +171,7 @@ public class CircleProgressView extends View {
         } else if (widthMode == MeasureSpec.AT_MOST) {
             width += (int) Math.min(widthSize, circleRadius * 2);
         } else {
-            width += widthSize;
+            width =windowWidth;
         }
 
         if (heightMode == MeasureSpec.EXACTLY) {
@@ -157,7 +179,7 @@ public class CircleProgressView extends View {
         } else if (heightMode == MeasureSpec.AT_MOST) {
             height += (int) Math.min(heightSize, circleRadius * 2);
         } else {
-            height += heightSize;
+            height = windowHeight;
         }
 
         setMeasuredDimension(width, height);
@@ -181,7 +203,7 @@ public class CircleProgressView extends View {
      *
      */
     public void setProgress(int progress){
-        this.progress = progress;
+        this.currentProgress = progress;
         this.centerText = progress + "%";
         invalidate();
     }
