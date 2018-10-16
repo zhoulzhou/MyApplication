@@ -83,7 +83,7 @@ public class CircleProgressView extends View {
         progressPaint.setColor(progressColor);
         progressPaint.setAntiAlias(true);
         //取两层绘制交集。显示上层
-        progressPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        progressPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SCREEN));
 
         path = new Path();
 
