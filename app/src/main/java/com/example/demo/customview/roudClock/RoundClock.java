@@ -52,7 +52,36 @@ public class RoundClock extends View implements Runnable {
 
         canvas.restore();
 
-        
+        Paint linePaint = new Paint(mPaint);
+        linePaint.setStrokeWidth(2);
+        linePaint.setColor(Color.GRAY);
+        float y = 240;
+        int count = 60;
+        Paint numberPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        numberPaint.setStrokeWidth(3);
+        numberPaint.setTextSize(30);
+        numberPaint.setColor(Color.RED);
+
+        for(int i=0; i<count; i++){
+            if(i%5 ==0){
+                //绘制数字刻度
+                canvas.drawText(i==0 ? "12" : String.valueOf(i/5),((i/5)>9 || i==0)? -18f:-9f,-y-9f,numberPaint);
+            }else{
+                //绘制非数字的刻度
+                canvas.drawLine(0f,y,0f,y+30f,linePaint);
+            }
+            //旋转画布 每次旋转绘制数字，或直线
+            canvas.rotate(360/count,0f,0f);
+        }
+
+        //绘制秒针
+        numberPaint.setStrokeWidth(4);
+        canvas.drawCircle(0,0,15,numberPaint);
+
+        numberPaint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(0,0,12,numberPaint);
+
+        canvas.drawLine(0,45,0,-234,numberPaint);
     }
 
     @Override
