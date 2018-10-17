@@ -51,6 +51,8 @@ public class RoundClock extends View implements Runnable {
         canvas.drawTextOnPath("Rolex brand clock", path, 14, 0, textPaint);
 
         canvas.restore();
+
+        
     }
 
     @Override
