@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FlyweightFactory {
-    private Map<String,Flyweight> flys = new HashMap<String,Flyweight>();
+    private Map<String,Flyweight> flys = new HashMap<>();
 
     /**
      * 通过内蕴状态在缓存中查找对象，找不到就新建一个
