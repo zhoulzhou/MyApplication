@@ -32,9 +32,8 @@ public class Translation {
     private Content content;
 
     public void show(){
-        LogUtils.d("Translation bean","from= " + content.from
-                                     + "to= " + content.to
-                                     + "out= " + content.out);
+        LogUtils.d("from= " + content.from + "  to= " + content.to
+                                     + "  out= " + content.out);
     }
 
     @Override

@@ -8,8 +8,6 @@ import android.widget.TextView;
 import com.example.demo.common.LogUtils;
 import com.example.demo.myapplication.R;
 
-import org.w3c.dom.Text;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,6 +23,7 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mTextView = (TextView) findViewById(R.id.text);
 
+        request();
     }
 
     private void request(){
@@ -45,7 +44,7 @@ public class TestActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Translation> call, Throwable t) {
-                LogUtils.d("","call onFailure");
+                LogUtils.d("call onFailure");
             }
         });
 
