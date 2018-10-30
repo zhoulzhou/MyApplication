@@ -14,7 +14,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class TestActivity extends AppCompatActivity {
+public class RetrofitTestActivity extends AppCompatActivity {
     private TextView mTextView;
 
     @Override
