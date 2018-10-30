@@ -1,5 +1,7 @@
 package com.example.demo.rxreg;
 
+import com.example.demo.common.LogUtils;
+
 /**
  * // URL模板
  http://fy.iciba.com/ajax.php
@@ -30,7 +32,14 @@ public class Translation {
     private Content content;
 
     public void show(){
+        LogUtils.d("Translation bean","from= " + content.from
+                                     + "to= " + content.to
+                                     + "out= " + content.out);
+    }
 
+    @Override
+    public String toString() {
+        return super.toString();
     }
 
     private static class Content{
@@ -40,4 +49,5 @@ public class Translation {
         private String out;
         private int errNo;
     }
+
 }
