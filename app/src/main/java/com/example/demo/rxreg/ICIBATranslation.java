@@ -27,7 +27,7 @@ import com.example.demo.common.LogUtils;
     }
  }
  */
-public class Translation {
+public class ICIBATranslation {
     private int status;
     private Content content;
 

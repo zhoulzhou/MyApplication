@@ -5,7 +5,7 @@ import retrofit2.http.GET;
 
 public interface GetRequest_interface {
     @GET("ajax.php?a=fy&f=auto&t=auto&w=hello%20world")
-    Call<Translation> getCall();
+    Call<ICIBATranslation> getCall();
 
     // 注解里传入 网络请求 的部分URL地址
     // Retrofit把网络请求的URL分成了两部分：一部分放在Retrofit对象里，另一部分放在网络请求接口里

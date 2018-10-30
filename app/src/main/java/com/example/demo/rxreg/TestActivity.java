@@ -34,16 +34,16 @@ public class TestActivity extends AppCompatActivity {
 
         GetRequest_interface getRequest_interface = retrofit.create(GetRequest_interface.class);
 
-        Call<Translation> call = getRequest_interface.getCall();
+        Call<ICIBATranslation> call = getRequest_interface.getCall();
 
-        call.enqueue(new Callback<Translation>() {
+        call.enqueue(new Callback<ICIBATranslation>() {
             @Override
-            public void onResponse(Call<Translation> call, Response<Translation> response) {
+            public void onResponse(Call<ICIBATranslation> call, Response<ICIBATranslation> response) {
                 response.body().show();
             }
 
             @Override
-            public void onFailure(Call<Translation> call, Throwable t) {
+            public void onFailure(Call<ICIBATranslation> call, Throwable t) {
                 LogUtils.d("call onFailure");
             }
         });
