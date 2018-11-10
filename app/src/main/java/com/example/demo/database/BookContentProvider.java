@@ -1,7 +1,11 @@
 package com.example.demo.database;
 
 import android.content.ContentProvider;
+import android.content.ContentValues;
 import android.content.UriMatcher;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
 //https://blog.csdn.net/CodingEnding/article/details/72810365
 public class BookContentProvider extends ContentProvider {
