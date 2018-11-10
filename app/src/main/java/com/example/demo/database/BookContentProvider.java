@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
@@ -59,8 +60,11 @@ public class BookContentProvider extends ContentProvider {
                 insertUri = Uri.parse(AUTHOR_ITEM_URI + dataId);
                 break;
             default:
-                break;
+                // 如果插入失败也最好抛出异常 通知调用者
+                throw new SQLException("Failed to insert row into " + uri);
         }
+        // 用于通知所有观察者数据已经改变
+        getContext().getContentResolver().notifyChange(insertUri, null);
         return insertUri;
     }
 
@@ -88,8 +92,9 @@ public class BookContentProvider extends ContentProvider {
                 deleteNum = database.delete(Author.TABLE_NAME, Author.Author_ID + "=?", new String[]{authorDeleteId});
                 break;
             default:
-                break;
+                throw new IllegalArgumentException("Unknown URI " + uri);
         }
+        getContext().getContentResolver().notifyChange(uri, null);
         return deleteNum;
     }
 
@@ -114,8 +119,9 @@ public class BookContentProvider extends ContentProvider {
                 updateNum = database.update(Author.TABLE_NAME, values, Author.Author_ID+"=?", new String[]{authorUpdateId});
                 break;
             default:
-                break;
+                throw new IllegalArgumentException("Unknown URI " + uri);
         }
+        getContext().getContentResolver().notifyChange(uri, null);
         return updateNum;
     }
 
@@ -146,9 +152,19 @@ public class BookContentProvider extends ContentProvider {
             default:
                 break;
         }
+        // 这个地方要解释一下 这句语句的作用，很多人自定义provider的时候 在query方法里面都忘记
+        // 写这句话，有的人写了也不知道这句话是干嘛的，实际上这句话就是给我们的cursor加了一个观察者
+        // 有兴趣的可以看一下sdk里面这个函数的源码，非常简单。那么他的实际作用就是如果返回的cursor
+        // 被用在SimpleCursorAdapter 类似的这种adapter的话，一旦uri所对应的provider数据发生了变化
+        // 那么这个adapter里的数据是会自己变化刷新的。这句话起的就是这个作用 有兴趣的可以自己写代码
+        // 验证一下 如果把这句话删除掉的话 adapter里的数据是不会再uri更新的时候 自动更新的
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
+    /**
+     * 这个地方的返回值 一定要和manifest你配置activity的时候data 字段的值相同 不然会报错
+     */
     @Override
     public String getType(Uri uri) {
         String type = "";
@@ -166,7 +182,8 @@ public class BookContentProvider extends ContentProvider {
                 type = "vnd.android.cursor.item/vnd." + AUTHORITY + "Author";
                 break;
             default:
-                break;
+                // 注意这个地方记得不匹配的时候抛出异常信息 这样当比人调用失败的时候会知道哪里不对
+                throw new IllegalArgumentException("Unknown uri" + uri);
         }
         return type;
     }
