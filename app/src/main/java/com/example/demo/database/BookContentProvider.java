@@ -19,12 +19,8 @@ public class BookContentProvider extends ContentProvider {
     private static final int AUTHOR_ITEM = 3;
 
     // uri的scheme部分 这个部分是固定的写法
-    private static final String SCHEME = "content://";
-    private static final String AUTHORITY = "com.example.bookprovider";
-    private static final String BOOK_URI = SCHEME + AUTHORITY +"/" + Book.TABLE_NAME;
-    private static final String BOOK_ITEM_URI = SCHEME + AUTHORITY +"/" + Book.TABLE_NAME + "/";
-    private static final String AUTHOR_URI = SCHEME + AUTHORITY +"/" + Author.TABLE_NAME;
-    private static final String AUTHOR_ITEM_URI = SCHEME + AUTHORITY +"/" + Author.TABLE_NAME + "/";
+    public static final String SCHEME = "content://";
+    public static final String AUTHORITY = "com.example.bookprovider";
 
     private BookDBOpenHelper bookOpenHelper;
     private static UriMatcher uriMatcher;
@@ -52,12 +48,12 @@ public class BookContentProvider extends ContentProvider {
             case BOOK:
             case BOOK_ITEM:
                 dataId = database.insert(Book.TABLE_NAME, null, values);
-                insertUri = Uri.parse(BOOK_ITEM_URI + dataId);
+                insertUri = Uri.parse(Book.BOOK_ITEM_URI + dataId);
                 break;
             case AUTHOR:
             case AUTHOR_ITEM:
                 dataId = database.insert(Author.TABLE_NAME, null, values);
-                insertUri = Uri.parse(AUTHOR_ITEM_URI + dataId);
+                insertUri = Uri.parse(Author.AUTHOR_ITEM_URI + dataId);
                 break;
             default:
                 // 如果插入失败也最好抛出异常 通知调用者
