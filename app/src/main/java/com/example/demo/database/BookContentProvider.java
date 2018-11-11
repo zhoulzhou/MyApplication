@@ -27,10 +27,10 @@ public class BookContentProvider extends ContentProvider {
 
     static {//初始化
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(AUTHORITY, Book.TABLE_NAME, BOOK);
-        uriMatcher.addURI(AUTHORITY, Book.TABLE_NAME + "/#", BOOK_ITEM);
-        uriMatcher.addURI(AUTHORITY, Author.TABLE_NAME, AUTHOR);
-        uriMatcher.addURI(AUTHORITY, Author.TABLE_NAME + "/#", AUTHOR_ITEM);
+        uriMatcher.addURI(AUTHORITY, BookTable.TABLE_NAME, BOOK);
+        uriMatcher.addURI(AUTHORITY, BookTable.TABLE_NAME + "/#", BOOK_ITEM);
+        uriMatcher.addURI(AUTHORITY, AuthorTable.TABLE_NAME, AUTHOR);
+        uriMatcher.addURI(AUTHORITY, AuthorTable.TABLE_NAME + "/#", AUTHOR_ITEM);
     }
 
     @Override
@@ -47,13 +47,13 @@ public class BookContentProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
             case BOOK:
             case BOOK_ITEM:
-                dataId = database.insert(Book.TABLE_NAME, null, values);
-                insertUri = Uri.parse(Book.BOOK_ITEM_URI + dataId);
+                dataId = database.insert(BookTable.TABLE_NAME, null, values);
+                insertUri = Uri.parse(BookTable.BOOK_ITEM_URI + dataId);
                 break;
             case AUTHOR:
             case AUTHOR_ITEM:
-                dataId = database.insert(Author.TABLE_NAME, null, values);
-                insertUri = Uri.parse(Author.AUTHOR_ITEM_URI + dataId);
+                dataId = database.insert(AuthorTable.TABLE_NAME, null, values);
+                insertUri = Uri.parse(AuthorTable.AUTHOR_ITEM_URI + dataId);
                 break;
             default:
                 // 如果插入失败也最好抛出异常 通知调用者
@@ -71,21 +71,21 @@ public class BookContentProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
             case BOOK:
                 //访问Book表
-                deleteNum = database.delete(Book.TABLE_NAME, selection, selectionArgs);
+                deleteNum = database.delete(BookTable.TABLE_NAME, selection, selectionArgs);
                 break;
             case BOOK_ITEM:
                 //访问Book表中的某一条数据
                 String bookDeleteId = uri.getPathSegments().get(1);//被删除数据的id
-                deleteNum = database.delete(Book.TABLE_NAME, Book.BOOK_ID + "=?", new String[]{bookDeleteId});
+                deleteNum = database.delete(BookTable.TABLE_NAME, BookTable.BOOK_ID + "=?", new String[]{bookDeleteId});
                 break;
             case AUTHOR:
                 //访问Author表
-                deleteNum = database.delete(Author.TABLE_NAME, selection, selectionArgs);
+                deleteNum = database.delete(AuthorTable.TABLE_NAME, selection, selectionArgs);
                 break;
             case AUTHOR_ITEM:
                 //访问Author表中的某一条数据
                 String authorDeleteId = uri.getPathSegments().get(1);//被删除数据的id
-                deleteNum = database.delete(Author.TABLE_NAME, Author.Author_ID + "=?", new String[]{authorDeleteId});
+                deleteNum = database.delete(AuthorTable.TABLE_NAME, AuthorTable.Author_ID + "=?", new String[]{authorDeleteId});
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -101,18 +101,18 @@ public class BookContentProvider extends ContentProvider {
         int updateNum = 0;//被更新的数据条数
         switch (uriMatcher.match(uri)) {
             case BOOK:
-                updateNum = database.update(Book.TABLE_NAME, values, selection, selectionArgs);
+                updateNum = database.update(BookTable.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case BOOK_ITEM:
                 String bookUpdateId = uri.getPathSegments().get(1);//被更新的数据id
-                updateNum = database.update(Book.TABLE_NAME, values, Book.BOOK_ID+"=?", new String[]{bookUpdateId});
+                updateNum = database.update(BookTable.TABLE_NAME, values, BookTable.BOOK_ID+"=?", new String[]{bookUpdateId});
                 break;
             case AUTHOR:
-                updateNum = database.update(Author.TABLE_NAME, values, selection, selectionArgs);
+                updateNum = database.update(AuthorTable.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case AUTHOR_ITEM:
                 String authorUpdateId = uri.getPathSegments().get(1);
-                updateNum = database.update(Author.TABLE_NAME, values, Author.Author_ID+"=?", new String[]{authorUpdateId});
+                updateNum = database.update(AuthorTable.TABLE_NAME, values, AuthorTable.Author_ID+"=?", new String[]{authorUpdateId});
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -128,21 +128,21 @@ public class BookContentProvider extends ContentProvider {
         Cursor cursor = null;//用于返回的Cursor对象
         switch (uriMatcher.match(uri)) {
             case BOOK:
-                cursor = database.query(Book.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(BookTable.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case BOOK_ITEM:
                 String bookQueryId = uri.getPathSegments().get(1);//用于查询的id
-                cursor = database.query(Book.TABLE_NAME, projection, Book.BOOK_ID+"=?", new String[]{bookQueryId},
+                cursor = database.query(BookTable.TABLE_NAME, projection, BookTable.BOOK_ID+"=?", new String[]{bookQueryId},
                         null, null, sortOrder);
                 break;
             case AUTHOR:
-                cursor = database.query(Author.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(AuthorTable.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case AUTHOR_ITEM:
                 String authorQueryId = uri.getPathSegments().get(1);//用于查询的id
-                cursor = database.query(Author.TABLE_NAME, projection, Author.Author_ID+"=?", new String[]{authorQueryId},
+                cursor = database.query(AuthorTable.TABLE_NAME, projection, AuthorTable.Author_ID+"=?", new String[]{authorQueryId},
                         null, null, sortOrder);
                 break;
             default:
