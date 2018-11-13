@@ -17,16 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.example.demo.rxreg.RetrofitTestActivity">
+        <activity android:name="com.example.demo.database.DBTestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.example.demo.leak.ActivityOne"/>
-        <activity android:name="com.example.demo.leak.ActivityTwo" />
     </application>
 
 </manifest>

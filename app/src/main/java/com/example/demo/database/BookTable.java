@@ -11,7 +11,6 @@ public class BookTable implements BaseColumns {
     public static final String BOOK_ID = "book_id";
     public static final String NAME = "name";
     public static final String AUTHOR = "author";
-    public static final String PUBLISH_TIME = "publish_time";
     public static final String PRICE = "price";
-    public static final String PUSHLISHER = "publisher";
+    public static final String PRESS = "press";
 }
